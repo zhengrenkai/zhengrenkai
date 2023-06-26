@@ -16,17 +16,26 @@
   <meta name="author" content="John Doe">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Redis">
+    <meta name="description" content="Redis一、思考redis是什么 Rdies 是K-V的数据库  单线程（原子性），因此它是线程安全的  大量的操作都是在内存中完成，读写效率高，广泛用于缓存  并发量非常大的时候 可以作为中间件缓存 降低数据库的压力  不适合存储大文件 理论上每个key-value不能超过512MB   演化之路单机版的Redis假设有一个App 引入了Redis做缓存提高性能 把 Redis 当做缓存来使用">
 <meta property="og:type" content="article">
 <meta property="og:title" content="筑梦">
 <meta property="og:url" content="https://zhengrenkai.github.io/zhengrenkai/2023/06/26/Redis/index.html">
 <meta property="og:site_name" content="筑梦">
-<meta property="og:description" content="Redis">
+<meta property="og:description" content="Redis一、思考redis是什么 Rdies 是K-V的数据库  单线程（原子性），因此它是线程安全的  大量的操作都是在内存中完成，读写效率高，广泛用于缓存  并发量非常大的时候 可以作为中间件缓存 降低数据库的压力  不适合存储大文件 理论上每个key-value不能超过512MB   演化之路单机版的Redis假设有一个App 引入了Redis做缓存提高性能 把 Redis 当做缓存来使用">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="c:\Users\zzy\AppData\Roaming\Typora\typora-user-images\1687750276384.png">
+<meta property="og:image" content="c:\Users\zzy\AppData\Roaming\Typora\typora-user-images\1687750509715.png">
+<meta property="og:image" content="c:\Users\zzy\AppData\Roaming\Typora\typora-user-images\1687759052723.png">
+<meta property="og:image" content="c:\Users\zzy\AppData\Roaming\Typora\typora-user-images\1687759127461.png">
+<meta property="og:image" content="c:\Users\zzy\AppData\Roaming\Typora\typora-user-images\1687759527804.png">
+<meta property="og:image" content="c:\Users\zzy\AppData\Roaming\Typora\typora-user-images\1687760895402.png">
+<meta property="og:image" content="c:\Users\zzy\AppData\Roaming\Typora\typora-user-images\1687761600175.png">
+<meta property="og:image" content="c:\Users\zzy\AppData\Roaming\Typora\typora-user-images\1687761726088.png">
 <meta property="article:published_time" content="2023-06-26T02:44:42.349Z">
-<meta property="article:modified_time" content="2023-06-26T02:44:42.444Z">
+<meta property="article:modified_time" content="2023-06-26T07:28:34.807Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="c:\Users\zzy\AppData\Roaming\Typora\typora-user-images\1687750276384.png">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
@@ -243,7 +252,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          5 字
+          2k 字
         
       </span>
     
@@ -254,7 +263,7 @@
         
         
         
-          1 分钟
+          17 分钟
         
       </span>
     
@@ -305,7 +314,101 @@
             
               <div class="markdown-body">
                 
-                <h1 id="Redis"><a href="#Redis" class="headerlink" title="Redis"></a>Redis</h1>
+                <h1 id="Redis"><a href="#Redis" class="headerlink" title="Redis"></a>Redis</h1><h2 id="一、思考"><a href="#一、思考" class="headerlink" title="一、思考"></a>一、思考</h2><h3 id="redis是什么"><a href="#redis是什么" class="headerlink" title="redis是什么"></a>redis是什么</h3><ul>
+<li><p>Rdies 是K-V的数据库</p>
+</li>
+<li><p>单线程（原子性），因此它是线程安全的</p>
+</li>
+<li><p>大量的操作都是在内存中完成，读写效率高，广泛用于缓存</p>
+</li>
+<li><p>并发量非常大的时候 可以作为中间件缓存 降低数据库的压力</p>
+</li>
+<li><p>不适合存储大文件 理论上每个key-value不能超过512MB</p>
+</li>
+</ul>
+<h3 id="演化之路"><a href="#演化之路" class="headerlink" title="演化之路"></a>演化之路</h3><h4 id="单机版的Redis"><a href="#单机版的Redis" class="headerlink" title="单机版的Redis"></a>单机版的Redis</h4><p>假设有一个App 引入了Redis做缓存提高性能</p>
+<p>把 Redis 当做缓存来使用，从 MySQL 中查询数据，然后写入到 Redis 中，之后业务应用再从 Redis 中读取这些数据，由于 Redis 的数据都存储在内存中，所以这个速度飞快</p>
+<p><img src="C:\Users\zzy\AppData\Roaming\Typora\typora-user-images\1687750276384.png" srcset="/zhengrenkai/img/loading.gif" lazyload alt="1687750276384"></p>
+<h4 id="数据持久化"><a href="#数据持久化" class="headerlink" title="数据持久化"></a>数据持久化</h4><p>假设当业务变多，极其依赖Redis缓存，Redis因各种原因宕机，所有业务流量全部打向Mysql，Mysql也有可能宕机<img src="C:\Users\zzy\AppData\Roaming\Typora\typora-user-images\1687750509715.png" srcset="/zhengrenkai/img/loading.gif" lazyload alt="1687750509715"></p>
+<p>解决方案：重启Redis</p>
+<p>如若没有数据持久化 Redis所有数据存在缓存 即便重启 所有业务流量还是会打到Mysql </p>
+<p>将数据一份写到缓存 一份也写到磁盘 Redis重启则快速读取磁盘恢复数据 Redis则可以正常提供服务</p>
+<p>将内存数据写到磁盘的过程就是【数据持久化】</p>
+<h5 id="AOF"><a href="#AOF" class="headerlink" title="AOF"></a>AOF</h5><p>Redis 每一次执行写操作，除了写内存之外，同时也写一份到磁盘上</p>
+<p>既写内存 又写磁盘 这样肯定会影响Redis性能 为了提升效率 分析内存数据写到磁盘 分2步</p>
+<ol>
+<li><p>程序写文件的 PageCache（write）</p>
+</li>
+<li><p>把 PageCache 刷到磁盘（fsync）<img src="C:\Users\zzy\AppData\Roaming\Typora\typora-user-images\1687759052723.png" srcset="/zhengrenkai/img/loading.gif" lazyload alt="1687759052723"></p>
+</li>
+</ol>
+<p>写入磁盘的速度拖慢了</p>
+<p>优化：Redis 写内存由主线程来做，写内存完成后就给客户端返回结果，然后 Redis 用「另一个线程」去写磁盘，这样就可以避免主线程写磁盘对性能的影响。<img src="C:\Users\zzy\AppData\Roaming\Typora\typora-user-images\1687759127461.png" srcset="/zhengrenkai/img/loading.gif" lazyload alt="1687759127461"></p>
+<p>Redis AOF 持久化提供了 3 种刷盘机制：</p>
+<ol>
+<li>appendfsync always：主线程同步 fsync</li>
+<li>appendfsync no：依赖操作系统自动 fsync</li>
+<li>appendfsync everysec：后台线程每间隔1秒 fsync</li>
+</ol>
+<h5 id="AOF-瘦身"><a href="#AOF-瘦身" class="headerlink" title="AOF 瘦身"></a>AOF 瘦身</h5><p>随着时间 AOF越来越大 恢复速度变慢 压缩AOF的体积</p>
+<p>例如执行 set k1 v1，set k1 v2，其实我们只关心数据的最终版本 v2 就可以了<img src="C:\Users\zzy\AppData\Roaming\Typora\typora-user-images\1687759527804.png" srcset="/zhengrenkai/img/loading.gif" lazyload alt="1687759527804"></p>
+<h5 id="ROB-快照"><a href="#ROB-快照" class="headerlink" title="ROB 快照"></a>ROB 快照</h5><p>记录某一时刻下 Redis 中的数据，然后只需要把这个数据快照写到磁盘上就可以了</p>
+<p>优点：</p>
+<ol>
+<li>持久化文件体积小（二进制 + 压缩）</li>
+<li>写盘频率低（定时写入）</li>
+</ol>
+<p>缺点：因为是定时持久化，数据肯定没有 AOF 实时持久化完整，如果你的 Redis 只当做缓存，对于丢失数据不敏感（可从后端的数据库查询），那这种持久化方式是非常合适的</p>
+<h5 id="混合持久化"><a href="#混合持久化" class="headerlink" title="混合持久化"></a>混合持久化</h5><p>同时使用RDB和AOF两种持久化方式的一种配置方式</p>
+<p>可以在保证数据安全性和恢复速度的同时，兼顾了RDB的快速恢复和AOF的实时操作记录</p>
+<p>这样可以使Redis在各种故障情况下更具弹性和可靠性</p>
+<h5 id="持久化选择"><a href="#持久化选择" class="headerlink" title="持久化选择"></a>持久化选择</h5><ol>
+<li>业务对于数据丢失不敏感，选 RDB</li>
+<li>业务对数据完整性要求比较高，选 AOF</li>
+<li>具弹性和可靠性 选混合持久化</li>
+</ol>
+<h4 id="主从复制：多副本"><a href="#主从复制：多副本" class="headerlink" title="主从复制：多副本"></a>主从复制：多副本</h4><p>Redis宕机 恢复不管时间多少 期间是无法提供服务的 只能用恢复数据解决 思考一下 我们如部署多个实例 实例之间保持数据同步 宕机一个 <strong>手动</strong>从剩下的选择一个继续提供服务</p>
+<p>实时读写的节点叫做 master 另一个实时同步数据的节点叫做 slave</p>
+<p><img src="C:\Users\zzy\AppData\Roaming\Typora\typora-user-images\1687760895402.png" srcset="/zhengrenkai/img/loading.gif" lazyload alt="1687760895402"></p>
+<p>优点：</p>
+<ol>
+<li><strong>缩短不可用时间</strong>：master 发生宕机，我们可以手动把 slave 提升为 master 继续提供服务</li>
+<li><strong>提升读性能</strong>：让 slave 分担一部分读请求，提升应用的整体性能</li>
+</ol>
+<h4 id="哨兵：故障自动切换"><a href="#哨兵：故障自动切换" class="headerlink" title="哨兵：故障自动切换"></a>哨兵：故障自动切换</h4><p>主从复制比恢复数据快上很多 但需人工介入 人工的时间 业务还是会受到影响 切换过程变为自动化？</p>
+<p>创建哨兵 实时检测master健康状态：</p>
+<ol>
+<li>哨兵每间隔一段时间，询问 master 是否正常</li>
+<li>master 正常回复，表示状态正常，回复超时表示异常</li>
+<li>哨兵发现异常，发起主从切换</li>
+</ol>
+<p><img src="C:\Users\zzy\AppData\Roaming\Typora\typora-user-images\1687761600175.png" srcset="/zhengrenkai/img/loading.gif" lazyload alt="1687761600175"></p>
+<p>一个哨兵 网络问题可能会误判 部署多个哨兵 在不同的机器上 一起检测master<img src="C:\Users\zzy\AppData\Roaming\Typora\typora-user-images\1687761726088.png" srcset="/zhengrenkai/img/loading.gif" lazyload alt="1687761726088"></p>
+<ol>
+<li>多个哨兵每间隔一段时间，询问 master 是否正常</li>
+<li>master 正常回复，表示状态正常，回复超时表示异常</li>
+<li>一旦有一个哨兵判定 master 异常（不管是否是网络问题），就询问其它哨兵，如果多个哨兵（设置一个阈值）都认为 master 异常了，这才判定 master 确实发生了故障</li>
+<li>多个哨兵经过协商后，判定 master 故障，则发起主从切换</li>
+</ol>
+<p>由哪个哨兵发起<strong>主从切换</strong>？制定这样一个选举规则：</p>
+<ol>
+<li>每个哨兵都询问其它哨兵，请求对方为自己投票</li>
+<li>每个哨兵只投票给第一个请求投票的哨兵，且只能投票一次</li>
+<li>首先拿到超过半数投票的哨兵，当选为领导者，发起主从切换</li>
+</ol>
+<p>这个选举的过程：分布式系统领域中的「<strong>共识算法</strong>」</p>
+<p>容错性和高可用性，建议至少部署三个以上的哨兵节点 <strong>奇数个节点</strong></p>
+<h4 id="分片集群：横向扩展"><a href="#分片集群：横向扩展" class="headerlink" title="分片集群：横向扩展"></a>分片集群：横向扩展</h4><p>待</p>
+<h4 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h4><p>Redis 从最简单的单机版，经过数据持久化、主从多副本、哨兵集群，这一路优化下来， Redis 不管是性能还是稳定性，都越来越高，就算节点发生故障，也不用担心了。</p>
+<p>Redis 以这样的架构模式部署，基本上就可以稳定运行很长时间了。</p>
+<ol>
+<li><strong>数据怕丢失</strong>：持久化（RDB&#x2F;AOF）</li>
+<li><strong>恢复时间久</strong>：主从副本（副本随时可切）</li>
+<li><strong>手动切换时间长</strong>：哨兵集群（自动切换）</li>
+<li><strong>读存在压力</strong>：扩容副本（读写分离）</li>
+<li><strong>写存在压力</strong>：<strong>一个 mater 扛不住怎么办？</strong></li>
+</ol>
+<h4 id=""><a href="#" class="headerlink" title=""></a></h4>
                 
               </div>
             
